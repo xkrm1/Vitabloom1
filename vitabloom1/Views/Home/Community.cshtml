@@ -1,0 +1,110 @@
+﻿@model List<VitaBloom.Models.CommunityPost>
+
+@{
+    ViewData["Title"] = "Community";
+}
+
+<div class="community-page">
+
+    <div class="community-header">
+        <h1>Community 👥</h1>
+        <p>Share, Inspire, Support</p>
+    </div>
+
+
+    <!-- CREATE POST -->
+
+    <div class="create-post">
+
+        <h2>Create a Post ✍️</h2>
+
+        <form asp-controller="Home"
+              asp-action="Community"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+
+                <label>Name</label>
+
+                <input type="text"
+                       name="Name"
+                       placeholder="Enter your name"
+                       maxlength="30"
+                       required />
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>What's on your mind?</label>
+
+                <textarea name="Message"
+                          placeholder="Share something..."
+                          maxlength="200"
+                          required></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>📷 Add a Picture</label>
+
+                <input type="file"
+                       name="ImageFile"
+                       accept="image/*" />
+
+            </div>
+
+
+            <button type="submit" class="post-button">
+                Post
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- POSTS -->
+
+    <div class="posts">
+
+        @foreach (var post in Model)
+        {
+            <div class="community-post">
+
+                <div class="post-header">
+                    <strong>@post.Name</strong>
+                </div>
+
+                <p class="post-message">
+                    @post.Message
+                </p>
+
+
+                @if (!string.IsNullOrEmpty(post.ImagePath))
+                {
+                    <img src="@post.ImagePath"
+                         class="post-image"
+                         alt="Post picture" />
+                }
+
+
+                <div class="post-actions">
+
+                    <button type="button"
+                            onclick="likePost(this)">
+                        ❤️ <span>@post.Likes</span>
+                    </button>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

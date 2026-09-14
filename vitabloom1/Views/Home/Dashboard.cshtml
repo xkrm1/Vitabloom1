@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="dashboard">
+
+    <aside class="sidebar">
+
+        <h2>VitaBloom</h2>
+
+        <a asp-action="Dashboard">📊 Dashboard</a>
+
+        <a asp-action="WaterTracker">💧 Water Tracker</a>
+
+        <a asp-action="Recipes">🍲 Recipes</a>
+
+        <a asp-action="Community">👥 Community</a>
+
+        <a href="#">⚙️ Settings</a>
+
+        
+
+    </aside>
+
+    <main class="dashboard-content">
+
+        <h1>Dashboard</h1>
+
+        <div class="cards">
+
+            <div class="card">
+                💧
+                <h2>6/8</h2>
+                <p>Glasses</p>
+            </div>
+
+            <div class="card">
+                👣
+                <h2>7,320</h2>
+                <p>Steps</p>
+            </div>
+
+            <div class="card">
+                🔥
+                <h2>2,340</h2>
+                <p>Kcal</p>
+            </div>
+
+        </div>
+
+        <div class="progress-box">
+
+            <h2>Weekly Progress</h2>
+
+            <h1>75%</h1>
+
+            <p>Goal Progress</p>
+
+        </div>
+
+    </main>
+
+</div>

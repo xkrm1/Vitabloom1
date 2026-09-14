@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Healthy Recipes";
+}
+
+<div class="recipes-page">
+
+    <div class="recipes-header">
+        <h1>Healthy <span>Recipes</span></h1>
+        <p>Delicious meals for a healthy lifestyle</p>
+    </div>
+
+    <div class="recipe-container">
+
+        <!-- Quinoa Salad -->
+        <div class="recipe-card">
+            <div class="recipe-icon">🥗</div>
+            <h2>Quinoa Salad</h2>
+            <p>320 kcal</p>
+            <br>
+            <button type="button"
+                    onclick="showRecipe(
+                'Quinoa Salad',
+                '🥗',
+                'Quinoa, cucumber, tomato, lettuce, and a light dressing.',
+                'Cook the quinoa, chop the vegetables, mix everything together, and add your favorite light dressing.'
+                )">
+                View Recipe
+            </button>
+        </div>
+
+        <!-- Avocado Toast -->
+        <div class="recipe-card">
+            <div class="recipe-icon">🥑</div>
+            <h2>Avocado Toast</h2>
+            <p>280 kcal</p>
+            <br>
+            <button type="button"
+                    onclick="showRecipe(
+                'Avocado Toast',
+                '🥑',
+                'Whole-grain bread topped with fresh avocado.',
+                'Toast the bread, mash the avocado, spread it on the toast, and add a little seasoning.'
+                )">
+                View Recipe
+            </button>
+        </div>
+
+        <!-- Grilled Chicken Bowl -->
+        <div class="recipe-card">
+            <div class="recipe-icon">🍗</div>
+            <h2>Grilled Chicken Bowl</h2>
+            <p>450 kcal</p>
+
+            <br>
+
+            <button type="button"
+                    onclick="showRecipe(
+                'Grilled Chicken Bowl',
+                '🍗',
+                'Grilled chicken served with rice and fresh vegetables.',
+                'Grill the chicken until fully cooked, prepare the rice, add vegetables, and place everything in a bowl.'
+                )">
+                View Recipe
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Recipe Popup -->
+<div id="recipeModal" class="recipe-modal">
+
+    <div class="recipe-modal-content">
+
+        <button class="close-button" onclick="closeRecipe()">×</button>
+
+        <div id="modalIcon" class="modal-icon">🥗</div>
+
+        <h2 id="modalTitle">Recipe</h2>
+
+        <p id="modalDescription"></p>
+
+        <h3>How to prepare</h3>
+
+        <p id="modalInstructions"></p>
+
+        <button class="close-recipe" onclick="closeRecipe()">
+            Close
+        </button>
+
+    </div>
+
+</div>
