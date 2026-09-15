@@ -16,30 +16,43 @@
     </div>
 
     <div class="hero-image">
-        <img src="~/images/healthy-food.jpg"
+        <img src="https://png.pngtree.com/png-vector/20241025/ourmid/pngtree-healthy-food-cartoon-design-png-image_14145959.png"
              alt="Healthy food">
     </div>
 
 </section>
-
 <section class="features">
 
-    <div class="feature">
-        💧
+    <a asp-controller="Home"
+       asp-action="Watertracker"
+       class="feature">
+
+        <div class="feature-icon">💧</div>
         <h3>Water</h3>
         <p>Stay hydrated</p>
-    </div>
 
-    <div class="feature">
-        👣
+    </a>
+
+
+    <a asp-controller="Home"
+       asp-action="Dashboard"
+       class="feature">
+
+        <div class="feature-icon">🚶</div>
         <h3>Steps</h3>
         <p>Track your movement</p>
-    </div>
 
-    <div class="feature">
-        🍎
+    </a>
+
+
+    <a asp-controller="Home"
+       asp-action="Recipes"
+       class="feature">
+
+        <div class="feature-icon">🍎</div>
         <h3>Healthy Food</h3>
         <p>Discover healthy meals</p>
-    </div>
+
+    </a>
 
 </section>

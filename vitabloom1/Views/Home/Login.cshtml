@@ -9,6 +9,13 @@
         <h2>Welcome Back!</h2>
         <p>Login to continue</p>
 
+        @if (TempData["Message"] != null)
+        {
+            <div class="login-success">
+                @TempData["Message"]
+            </div>
+        }
+
         @if (ViewBag.Error != null)
         {
             <div class="login-error">

@@ -829,3 +829,292 @@
         font-size: 13px;
         color: #777;
     }
+
+/* HAMBURGER NAVIGATION */
+
+.navbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 30px;
+    background: white;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.menu-button {
+    display: block !important;
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.nav-links {
+    display: none !important;
+    position: absolute;
+    top: 65px;
+    right: 20px;
+    flex-direction: column;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    z-index: 9999;
+    min-width: 160px;
+}
+
+    .nav-links.show {
+        display: flex !important;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: #333;
+    }
+
+.logout-link {
+    color: #e95b5b !important;
+    font-weight: bold;
+}
+
+
+/* DEVELOPERS */
+
+.developers {
+    text-align: center;
+    margin: 50px auto;
+    max-width: 800px;
+}
+
+    .developers h2 {
+        font-size: 30px;
+        margin-bottom: 5px;
+    }
+
+.developer-subtitle {
+    color: #777;
+    margin-bottom: 30px;
+}
+
+.developer-container {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.developer-card {
+    width: 230px;
+    padding: 25px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+    transition: 0.3s;
+}
+
+    .developer-card:hover {
+        transform: translateY(-5px);
+    }
+
+.developer-icon {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.developer-card h3 {
+    margin: 10px 0 5px;
+    color: #496b3d;
+}
+
+.developer-card p {
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.facebook-button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 20px;
+    background: deeppink;
+    color: whitesmoke;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+    .facebook-button:hover {
+        opacity: 0.85;
+    }
+
+.feature {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.settings-page {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+    .settings-page h1 {
+        color: #496b3d;
+    }
+
+.settings-card {
+    background: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+    .settings-card h3 {
+        margin-top: 0;
+        color: #496b3d;
+    }
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+/* Toggle button */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: #ccc;
+    border-radius: 30px;
+}
+
+    .slider:before {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        left: 3px;
+        top: 3px;
+        background: white;
+        border-radius: 50%;
+        transition: 0.3s;
+    }
+
+.switch input:checked + .slider {
+    background: #e95b7a;
+}
+
+    .switch input:checked + .slider:before {
+        transform: translateX(24px);
+    }
+
+/* DARK MODE */
+
+body.dark-mode {
+    background: #1e1e1e;
+    color: #f5f5f5;
+}
+
+    body.dark-mode header {
+        background: #252525;
+    }
+
+    body.dark-mode .navbar {
+        background: #252525;
+    }
+
+    body.dark-mode .nav-links {
+        background: #252525;
+    }
+
+        body.dark-mode .nav-links a {
+            color: #f5f5f5;
+        }
+
+            body.dark-mode .nav-links a:hover {
+                background: #333;
+            }
+
+    body.dark-mode .settings-card {
+        background: #2b2b2b;
+        color: #f5f5f5;
+    }
+
+        body.dark-mode .settings-page h1,
+        body.dark-mode .settings-card h3 {
+            color: #e95b7a;
+        }
+
+    body.dark-mode .settings-page p {
+        color: #ddd;
+    }
+
+    body.dark-mode .feature,
+    body.dark-mode .community-post,
+    body.dark-mode .recipe-card,
+    body.dark-mode .dashboard-card {
+        background: #2b2b2b;
+        color: #f5f5f5;
+    }
+
+    body.dark-mode footer {
+        background: #183d18;
+    }
+
+
+.features .feature {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+    .features .feature:hover {
+        transform: translateY(-5px);
+    }
+
+    .features .feature h3,
+    .features .feature p {
+        color: inherit;
+    }
+
+.feature {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+    .feature:hover {
+        transform: translateY(-5px);
+    }
+
+    .feature h3,
+    .feature p {
+        color: inherit;
+    }

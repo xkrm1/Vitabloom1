@@ -1,20 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using System.IO;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VitaBloom.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace VitaBloom.Controllers
 {
@@ -41,60 +38,57 @@ namespace VitaBloom.Controllers
             return View();
         }
 
-        // LOGIN
-        private static List<RegisterViewModel> accounts = new List<RegisterViewModel>
-{
-    new RegisterViewModel
-    {
-        Username = "Admin",
-        Email = "admin@gmail.com",
-        Password = "123456",
-        ConfirmPassword = "123456"
-    }
-};
+        // =============================
+        // ACCOUNT STORAGE
+        // =============================
 
+        private static string AccountFile =>
+            Path.Combine(Directory.GetCurrentDirectory(), "accounts.json");
 
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Login()
+        private class Account
         {
-            return View();
+            public string FullName { get; set; } = "";
+            public string Email { get; set; } = "";
+            public string Password { get; set; } = "";
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+        private List<Account> GetAccounts()
         {
-            var account = accounts.FirstOrDefault(a =>
-     a.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
-     a.Password == password);
+            if (!System.IO.File.Exists(AccountFile))
+                return new List<Account>();
 
-            if (account != null)
-            {
-                var claims = new List<Claim>
-        {
-           new Claim(ClaimTypes.Name, account.Username),
-new Claim(ClaimTypes.Email, account.Email)
-        };
+            string json = System.IO.File.ReadAllText(AccountFile);
 
-                var identity = new ClaimsIdentity(
-                    claims,
-                    CookieAuthenticationDefaults.AuthenticationScheme
-                );
-
-                var principal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    principal
-                );
-
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.Error = "Invalid email or password.";
-            return View();
+            return JsonSerializer.Deserialize<List<Account>>(json)
+                   ?? new List<Account>();
         }
+
+        private void SaveAccounts(List<Account> accounts)
+        {
+            string json = JsonSerializer.Serialize(
+                accounts,
+                new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+
+            System.IO.File.WriteAllText(AccountFile, json);
+        }
+
+        private string HashPassword(string password)
+        {
+            using SHA256 sha256 = SHA256.Create();
+
+            byte[] bytes = Encoding.UTF8.GetBytes(password);
+            byte[] hash = sha256.ComputeHash(bytes);
+
+            return Convert.ToHexString(hash);
+        }
+
+
+        // =============================
+        // REGISTER
+        // =============================
 
         [AllowAnonymous]
         [HttpGet]
@@ -107,37 +101,125 @@ new Claim(ClaimTypes.Email, account.Email)
         [HttpPost]
         public IActionResult Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                TempData["Message"] = "Account created successfully!";
-                return RedirectToAction("Login");
+                return View(model);
             }
 
-            return View(model);
+            var accounts = GetAccounts();
+
+            // Check if email already exists
+            if (accounts.Any(a =>
+                a.Email.Equals(model.Email, StringComparison.OrdinalIgnoreCase)))
+            {
+                ModelState.AddModelError(
+                    "Email",
+                    "This email is already registered.");
+
+                return View(model);
+            }
+
+            // Save new account
+            var account = new Account
+            {
+                FullName = model.Username,
+                Email = model.Email,
+                Password = HashPassword(model.Password)
+            };
+
+            accounts.Add(account);
+
+            SaveAccounts(accounts);
+
+            TempData["Message"] = "Account created successfully! You can now login.";
+
+            return RedirectToAction("Login");
         }
 
-        // DASHBOARD
+
+        // =============================
+        // LOGIN
+        // =============================
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            var accounts = GetAccounts();
+
+            string hashedPassword = HashPassword(password);
+
+            var account = accounts.FirstOrDefault(a =>
+                a.Email.Equals(email, StringComparison.OrdinalIgnoreCase)
+                && a.Password == hashedPassword);
+
+            // Account found
+            if (account != null)
+            {
+                var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, account.FullName),
+            new Claim(ClaimTypes.Email, account.Email)
+        };
+
+                var identity = new ClaimsIdentity(
+                    claims,
+                    CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal);
+
+                return RedirectToAction("Index");
+            }
+
+            // Account not found
+            ViewBag.Error = "Invalid email or password.";
+
+            return View();
+        }
+
         [Authorize]
         public IActionResult Dashboard()
         {
             return View();
         }
 
-        // WATER TRACKER
-        public IActionResult WaterTracker()
+        [Authorize]
+        public IActionResult Watertracker()
         {
             return View();
         }
 
-        // RECIPES
         [Authorize]
         public IActionResult Recipes()
         {
             return View();
         }
 
+        // =============================
+        // LOGOUT
+        // =============================
+
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Login");
+        }
         // COMMUNITY
-        
+
         private static List<CommunityPost> posts = new List<CommunityPost>
 {
     new CommunityPost
@@ -173,48 +255,29 @@ new Claim(ClaimTypes.Email, account.Email)
         {
             if (ModelState.IsValid)
             {
+                // If an image was uploaded, we can set a placeholder path or
+                // extend this to save the file to wwwroot/uploads and set ImagePath.
                 if (post.ImageFile != null && post.ImageFile.Length > 0)
                 {
-                    string uploadsFolder = Path.Combine(
-                        Directory.GetCurrentDirectory(),
-                        "wwwroot",
-                        "uploads"
-                    );
-
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    string fileName = Guid.NewGuid().ToString()
-                        + Path.GetExtension(post.ImageFile.FileName);
-
-                    string filePath = Path.Combine(uploadsFolder, fileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await post.ImageFile.CopyToAsync(stream);
-                    }
-
-                    post.ImagePath = "/uploads/" + fileName;
+                    // For now, do not attempt to save the file to avoid IO complexity here.
+                    post.ImagePath = null;
                 }
 
+                // Add the post to the in-memory list and redirect to the Community view.
                 posts.Insert(0, post);
+
+                return RedirectToAction("Community");
             }
 
+            // If the model is invalid, re-display the view with validation messages.
             return View(posts);
         }
 
-
-        // LOGOUT
         [Authorize]
-        public async Task<IActionResult> Logout()
+        public IActionResult Settings()
         {
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme
-            );
-
-            return RedirectToAction("Login", "Home");
+            return View();
         }
     }
 }
+

@@ -13,43 +13,56 @@
     <link rel="stylesheet"
           href="~/css/style.css">
 
-    <script src="~/js/site.js"></script>
 
 </head>
 
 <body>
 
     <header>
-
         <nav class="navbar">
-
-            <a asp-controller="Home"
-               asp-action="Index"
-               class="logo">
-                🌿 Vita<span>Bloom</span>
-            </a>
-
-           
-
-                <div class="nav-links">
-                    <a asp-controller="Home" asp-action="Index">Home</a>
-                    <a asp-controller="Home" asp-action="About">About</a>
-                    <a asp-controller="Home" asp-action="Contact">Contact</a>
-                    <a asp-controller="Home" asp-action="Dashboard">Dashboard</a>
-
-
-                    
-                        <a asp-controller="Home"
-                           asp-action="Logout"
-                           class="logout-link">
-                            Logout
-                        </a>
-                    
+            @if (User.Identity != null &&
+                 User.Identity.IsAuthenticated &&
+                 ViewContext.RouteData.Values["action"]?.ToString() != "Login" &&
+                 ViewContext.RouteData.Values["action"]?.ToString() != "Register")
+            {
+                <div class="logo">
+                    🌱 VitaBloom
                 </div>
-            </nav>
+
+                <button type="button"
+                        class="menu-button"
+                        onclick="toggleMenu()">
+                    ☰
+                </button>
+
+                <div class="nav-links" id="navLinks">
+
+                    <a asp-controller="Home" asp-action="Index">
+                        Home
+                    </a>
+
+                    <a asp-controller="Home" asp-action="Dashboard">
+                        Dashboard
+                    </a>
+
+                    <a asp-controller="Home" asp-action="About">
+                        About
+                    </a>
+
+                    <a asp-controller="Home" asp-action="Contact">
+                        Contact
+                    </a>
+
+                    <a asp-controller="Home"
+                       asp-action="Logout"
+                       class="logout-link">
+                        Logout
+                    </a>
+
+                </div>
+            }
 
         </nav>
-
     </header>
 
     <main>

@@ -51,3 +51,32 @@ function likePost(button) {
     count.textContent = " " + likes;
 }
 
+function toggleMenu() {
+    const nav = document.getElementById("navLinks");
+
+    nav.classList.toggle("show");
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("darkMode", "on");
+    } else {
+        localStorage.setItem("darkMode", "off");
+    }
+}
+
+// Keep dark mode after changing pages
+document.addEventListener("DOMContentLoaded", function () {
+    if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark-mode");
+
+        let darkMode = document.getElementById("darkMode");
+
+        if (darkMode) {
+            darkMode.checked = true;
+        }
+    }
+});
+
